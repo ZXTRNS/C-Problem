@@ -1,46 +1,16 @@
 #include <stdio.h>
 
+int main() {
+    int T; 
+    scanf("%d", &T); 
+    for (int i = 0; i < T; i++) {
+        int A; 
+        scanf("%d", &A);
 
-// void transpose(int matrix[105][105], int rows, int cols) {
-//     int i, j;
-//     int transposed[105][105];
-    
-//     for (i = 0; i < rows; i++) {
-//         for (j = 0; j < cols; j++) {
-//             transposed[j][i] = matrix[i][j];
-//         }
-//     }
-// }
-
-
-
-int main()
-{
-    
-    int T,N;
-    int A[105][105];
-    int P[105];
-    
-    scanf("%d", &T);
-    for (int x = 1; x <= T; x++){
-        scanf("%d", &N);
-        
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                scanf("%d", &A[i][j]);
-            }
-        }
-        
-        printf("Case #%d =", x);
-        
-        for (int j = 0; j < N; j++) {
-            for (int i = 0; i < N; i++) {
-                P[j] += A[i][j];
-            }
-            printf(" %d", P[j]);
-        }
-        printf("\n");
-        
+        float R = (4.0/5.0) * A;       
+        float F = (9.0/5.0) * A + 32; 
+        float K = A + 273;             
+        printf("%.2f %.2f %.2f\n", R, F, K);
     }
 
     return 0;
