@@ -63,7 +63,7 @@ int main()
         
         for (int P = 0; P < A; P++){
             for (int J = 0; J < B; J++){
-                scanf("%c", &C[P][J]);
+                scanf(" %c", &C[P][J]);
             }
         }
         
