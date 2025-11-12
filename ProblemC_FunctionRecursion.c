@@ -1,80 +1,59 @@
 #include <stdio.h>
+#include <stdlib.h>
+#define MAX_SIZE 100
 
-int pacmon(char O [101][101], int U, int Y){
-    
-    int food = 0;
-    
-    for (int P = 0; P < U; P++){
-        for (int J = 0; J < Y; J++){
-            if (O [P][J] == 'P'){
-                
-                //Jalanan
-                if (O [P+1][J] == '.'){
-                    O [P+1][J] = 'P';
-                }
-                
-                if (O [P-1][J] == '.'){
-                    O [P-1][J] = 'P';
-                }
-                
-                if (O [P][J+1] == '.'){
-                    O [P][J+1] = 'P';
-                }
-                
-                if (O [P][J-1] == '.'){
-                    O [P][J-1] = 'P';
-                }
-                
-                //Makanan
-                if (O [P+1][J] == '*'){
-                    food += 1;
-                    O [P+1][J] = 'P';
-                }
-                
-                if (O [P-1][J] == '*'){
-                    food += 1;
-                    O [P-1][J] = 'P';
-                }
-                
-                if (O [P][J+1] == '*'){
-                    food += 1;
-                    O [P][J+1] = 'P';
-                }
-                
-                if (O [P][J-1] == '*'){
-                    food += 1;
-                    O [P][J+1] = 'P';
-                }
-                
-            }
-            
-        }
+char map[MAX_SIZE][MAX_SIZE];
+int N, M;
+int food_count;
+
+void dfs(int r, int c) {
+
+    if (r < 0 || r >= N || c < 0 || c >= M) {
+        return;
     }
-    return food;
+
+    if (map[r][c] == '#' || map[r][c] == 'V') {
+        return;
+    }
+
+    if (map[r][c] == '*') {
+        food_count++;
+    }
+
+    map[r][c] = 'V'; 
+
+    dfs(r + 1, c); // bawah
+    dfs(r - 1, c); // atas
+    dfs(r, c + 1); // kanan
+    dfs(r, c - 1); // kiri
 }
 
-int main()
-{
-    int T, A, B, count;
-    char C [101][101];
+int main() {
+    int T;
     scanf("%d", &T);
-    for (int i = 1; i <= T; i++){
-        scanf("%d %d", &A, &B);
+
+    for (int t = 1; t <= T; t++) {
+        int start_r = -1, start_c = -1;
+        food_count = 0;
         
-        for (int P = 0; P < A; P++){
-            for (int J = 0; J < B; J++){
-                scanf(" %c", &C[P][J]);
+        scanf("%d %d", &N, &M);
+
+        for (int i = 0; i < N; i++) {
+            scanf("%s", map[i]);
+            
+            for (int j = 0; j < M; j++) {
+                if (map[i][j] == 'P') {
+                    start_r = i;
+                    start_c = j;
+                }
             }
         }
         
-        count = pacmon(C, A, B);
-        printf("Case #%d: %d\n", i ,count);
-        
-        
+        if (start_r != -1) {
+            dfs(start_r, start_c);
+        }
+        printf("Case #%d: %d\n", t, food_count);
     }
-    
-    
-    
 
     return 0;
 }
