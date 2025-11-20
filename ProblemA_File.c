@@ -1,52 +1,58 @@
+/******************************************************************************
+
+Welcome to GDB Online.
+  GDB online is an online compiler and debugger tool for C, C++, Python, PHP, Ruby, 
+  C#, OCaml, VB, Perl, Swift, Prolog, Javascript, Pascal, COBOL, HTML, CSS, JS
+  Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
-int main()
-{
-    FILE *nulis = fopen("testdata.in", "w");
-    
-    int N, T, i, j;
-    char MP[82], S[41], membandingkan[100];
-    char *bro;
-    
-    scanf("%d", &N); getchar();
-    for (i = 0; i < N; i++){
-        fgets(MP, sizeof(MP), stdin);
-        MP[strcspn(MP, "\n")] = '\0';
-        fprintf(nulis, "%s\n", MP);
+struct Plants{
+    char NameFriend[41];
+    char Tree[41];
+};
+
+int main(){
+    FILE *file = fopen("testdata.in", "r");
+    if(file == NULL){
+        puts("Case #%d: N/A");
+        return 0;
     }
     
-    fclose(nulis);
+    int records;
+    fscanf(file, "%d\n", &records);
     
-    scanf("%d", &T);
-    for (i = 1; i <= T; i++){
-        scanf("%s", S);
+    struct Plants data[records];
+    
+    for(int i = 0; i < records; i++){
+        fscanf(file, "%[^#]#%[^\n]\n", data[i].NameFriend, data[i].Tree);
+    }
+    
+    int testcase;
+    fscanf(file, "%d\n", &testcase);
+    
+    char Name[101];
+    
+    for(int i = 0; i < testcase; i++){
+        fscanf(file, "%[^\n]\n", Name);
+        int found = 0;
         
-        FILE *baca = fopen("testdata.in", "r");
-        int gakKetemu = 0;
+        for(int j = 0; j < records; j++){
+            if(strcmp(Name, data[j].NameFriend) == 0){
+                printf("Case #%d: %s\n", i+1, data[j].Tree);
+                found = 1;
+                break;
+            }
+        }
         
-        while (fgets(membandingkan, sizeof(membandingkan), baca)){
-        	bro = strtok(membandingkan, "#");
-        	
-        	if (strcmp(bro, S) == 0){
-        		bro = strtok(NULL, "#");
-        		break;
-        	}
-        	else{
-        		gakKetemu++;
-			}
-		}
-		
-		fclose(baca);
-		
-		membandingkan[strcspn(membandingkan, "\n")] = '\0';
-		if (gakKetemu == N){
-			printf("Case #%d: N/A", i);
-		}
-		else{
-			printf("Case #%d: %s\n", i, bro);
-		}
+        if(!found){
+            printf("Case #%d: N/A\n", i+1);
+        }
     }
 
+    fclose(file);
     return 0;
 }
