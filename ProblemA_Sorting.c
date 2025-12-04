@@ -15,21 +15,23 @@ int main()
         
         scanf("%d", &N); getchar();
         for (int j = 0; j < N; j++){
-            scanf("%[^\n]", &data[j]); getchar();
+            scanf("%[^#]#%d", &nama[j], &nomor[j]); getchar();
         }
         
-        for (int j = 0; j < N; j++){
-            char* token = strtok(data[j],"#");
-            strcpy(nama[y++], token);
-            token = strtok(NULL, "#");
-            strcpy(temp2, token);
-            sscanf(temp2, "%d", &nomor[u++]);
-        }
+        // //token (dipisah pisah)
+        // for (int j = 0; j < N; j++){
+        //     char* token = strtok(data[j],"#");
+        //     strcpy(nama[y++], token);
+        //     //ganti dari string ke int
+        //     token = strtok(NULL, "#");
+        //     strcpy(temp2, token);
+        //     sscanf(temp2, "%d", &nomor[u++]);
+        // }
         
         //bubble sorting
         for (int p = 0; p < N; p++){
             for (int q = 0; q < (N-p-1); q++){
-                if (nomor[q] > nomor[q+1]){
+                if (nomor[q] > nomor[q+1] || (nomor[q] == nomor[q+1] && strcmp(nama[q], nama[q+1]) < 0)){
                     temp = nomor[q];
                     nomor[q] = nomor[q+1];
                     nomor[q+1] = temp;
