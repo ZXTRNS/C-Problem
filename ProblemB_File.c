@@ -1,75 +1,49 @@
-/******************************************************************************
-
-Welcome to GDB Online.
-  GDB online is an online compiler and debugger tool for C, C++, Python, PHP, Ruby, 
-  C#, OCaml, VB, Perl, Swift, Prolog, Javascript, Pascal, COBOL, HTML, CSS, JS
-  Code, Compile, Run and Debug online from anywhere in world.
-
-*******************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-struct Convert{
-    char num;
-    char huruf;
-}tabel[] = {
-    {'0', 'O'},
-    {'1', 'I'},
-    {'3', 'E'},
-    {'4', 'A'},
-    {'5', 'S'},
-    {'6', 'G'},
-    {'7', 'T'},
-    {'8', 'B'}
-};
+typedef struct {
+    char name[105];
+    int damage;
+} Hero;
 
-int Tabel = 8;
+int ascending; // 1 = asc, 0 = dsc
 
-char ConvertNum(char c){
-    for(int i = 0; i < Tabel; i++){
-        if(c == tabel[i].num)		// kalau karakter ada di tabel angka ke-i
-            return tabel[i].huruf;	// convert ke huruf di tabel tersebut
-    }
-    return c; // kalau bukan angka di tabel
-}   
+int compare(const void *a, const void *b) {
+    Hero *h1 = (Hero *)a;
+    Hero *h2 = (Hero *)b;
 
-char shiftBack(char c, int k){
-    if(c >= 'A' && c <= 'Z'){
-        return 'A' + ((c - 'A' - k + 26) % 26);
-    }
-    return c;
-}
-
-
-int main(){
-    FILE *file = fopen("testdata.in", "r");
-    if(file == NULL){
+    if (h1->damage == h2->damage) {
         return 0;
     }
 
-    int testcase;
-    fscanf(file, "%d\n", &testcase);
-    
-    for(int t = 1; t <= testcase; t++){
-        int shift;
-        fscanf(file, "%d\n", &shift);
-        
-        char S[1001];
-        fscanf(file, "%[^\n]\n", S);
-        
-	// step 1: angka --> huruf
-        for(int i = 0; S[i]; i++){
-            S[i] = ConvertNum(S[i]);
-        }
-        
-	// step 2: huruf di-shift back k kali
-        for(int i = 0; S[i]; i++){
-            S[i] = shiftBack(S[i], shift);
-        }
-        printf("Case #%d: %s\n", t, S);
+    if (ascending) {
+        return h1->damage - h2->damage;   // asc
+    } else {
+        return h2->damage - h1->damage;   // dsc
     }
-    
-    fclose(file);
+}
+
+int main() {
+    int T;
+    scanf("%d", &T);
+
+    Hero heroes[T];
+
+    for (int i = 0; i < T; i++) {
+        scanf("%s %d", heroes[i].name, &heroes[i].damage);
+    }
+
+    char order[5];
+    scanf("%s", order);
+
+    ascending = (strcmp(order, "asc") == 0);
+
+    qsort(heroes, T, sizeof(Hero), compare);
+
+    for (int i = 0; i < T; i++) {
+        printf("%s %d\n", heroes[i].name, heroes[i].damage);
+    }
+
     return 0;
 }

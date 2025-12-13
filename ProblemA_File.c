@@ -1,56 +1,61 @@
-/******************************************************************************
-
-Welcome to GDB Online.
-  GDB online is an online compiler and debugger tool for C, C++, Python, PHP, Ruby, 
-  C#, OCaml, VB, Perl, Swift, Prolog, Javascript, Pascal, COBOL, HTML, CSS, JS
-  Code, Compile, Run and Debug online from anywhere in world.
-
-*******************************************************************************/
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
-struct Plants{
-    char NameFriend[41];
-    char Tree[41];
-};
-
-int main(){
+int main() {
+    int N, M;
     FILE *file = fopen("testdata.in", "r");
-    if(file == NULL){
-        puts("Case #%d: N/A");
-        return 0;
+    char firstLine[105];
+    fgets(firstLine, sizeof(firstLine), file);
+    sscanf(firstLine, "%d %d", &N, &M);
+    
+    char data[105][15][20];
+    char line[105];
+
+    for(int i = 1; i <= N; i++){
+        fgets(line, sizeof(line), file);
+        line[strcspn(line, "\n")] = 0;
+        int col = 0, idx = 0;
+
+        for(int j = 0; line[j]; j++){
+            if(line[j] == ';'){
+                data[i][col++][idx] = 0;
+                idx = 0;
+            } 
+            else {
+                data[i][col][idx++] = line[j];
+            }
+        }
+        data[i][col][idx] = 0;
     }
-    
-    int records;
-    fscanf(file, "%d\n", &records);
-    
-    struct Plants data[records];
-    
-    for(int i = 0; i < records; i++){
-        fscanf(file, "%[^#]#%[^\n]\n", data[i].NameFriend, data[i].Tree);
-    }
-    
-    int testcase;
-    fscanf(file, "%d\n", &testcase);
-    
-    char Name[101];
-    
-    for(int i = 0; i < testcase; i++){
-        fscanf(file, "%[^\n]\n", Name);
-        int found = 0;
-        
-        for(int j = 0; j < records; j++){
-            if(strcmp(Name, data[j].NameFriend) == 0){
-                printf("Case #%d: %s\n", i+1, data[j].Tree);
-                found = 1;
+
+    int Q;
+    fscanf(file, "%d", &Q);
+
+    while (Q--) {
+        int x;
+        char H[20], S[20];
+        fscanf(file, "%d %s %s", &x, H, S);
+
+        if (x == 1) continue;
+
+        int target = -1;
+        for (int j = 0; j < M; j++) {
+            if (strcmp(data[1][j], H) == 0) {
+                target = j;
                 break;
             }
         }
-        
-        if(!found){
-            printf("Case #%d: N/A\n", i+1);
+
+        if (target != -1) {
+            strcpy(data[x][target], S);
         }
+    }
+
+    for (int i = 1; i <= N; i++) {
+        for (int j = 0; j < M; j++) {
+            printf("%s;", data[i][j]);
+        }
+        printf("\n");
     }
 
     fclose(file);
