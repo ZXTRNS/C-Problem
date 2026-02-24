@@ -1,11 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct tnode
+struct tnode
 {
 	int data;
-	struct node *next;
-}node;
+	struct tnode *next;
+};
+
+typedef struct tnode node;
 
 // create nodes
 	node *head = NULL;
@@ -121,22 +123,77 @@ void popTail ()
 	}
 }
 
-void popMid ()
+void popMid (int target)
 {
-	
+	if (head == NULL)
+	{
+		return;
+	}
+	else if (head == tail && head->data == target)
+	{
+		free(head);
+		head = tail = NULL;
+	}
+	else if (head->data == target)
+	{
+		popHead();
+	}
+	else if (tail->data == target)
+	{
+		popTail();
+	}
+	else
+	{
+		node *temp = head;
+		while (temp->next != NULL && temp->next->data != target)
+		{
+			temp = temp->next;
+		}
+
+		if (temp->next == NULL)
+		{
+			puts("target tidak ada");
+			return;
+		}
+		
+		node *hapus = temp->next;
+		temp->next = hapus->next;
+		free(hapus);
+	}
+}
+
+void viewAll()
+{
+	if (head == NULL)
+	{
+		puts("Kosong");
+			return;
+	}
+
+	node *temp = head;
+	while(temp != NULL)
+	{
+		printf("%d -> ", temp->data);
+		temp = temp->next;
+	}
+
+	puts("");
 }
 
 int main ()
 {	
-	// allocate memory
-	head = (struct node *)malloc(sizeof(struct node));
-	tail = (struct node *)malloc(sizeof(struct node));
+	pushHead(create_node(4));
+	pushTail(create_node(9));
+	pushMid(create_node(10));
+	viewAll();
 	
-	// check allocation
-	if (!head || !tail) {
-		printf("memory allocation failed \n");
-		return 1;
-	}
+	popHead();
+	viewAll();
 	
+	popTail();
+	viewAll();
+	
+	popMid(9);
+	viewAll();
 	return 0;
 }
